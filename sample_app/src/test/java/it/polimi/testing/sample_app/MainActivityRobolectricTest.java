@@ -106,7 +106,7 @@ public class MainActivityRobolectricTest extends RobolectricLifecycleTest<MainAc
             @Override
             public void afterDestroy()
             {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.DESTROYED, getActivity().myLifecycleVariable);
+                assertTrue("Wrong myLifecycleVariable!", getActivity().myLifecycleVariable==MainActivity.DESTROYED || getActivity().myLifecycleVariable==MainActivity.STOPPED);
             }
         };
     }

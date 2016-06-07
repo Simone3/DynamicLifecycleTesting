@@ -11,6 +11,7 @@ import it.polimi.testing.lifecycle.ActivityRuleLifecycleTest;
 import it.polimi.testing.lifecycle.DestroyCallback;
 import it.polimi.testing.lifecycle.PauseCallback;
 import it.polimi.testing.lifecycle.RecreateCallback;
+import it.polimi.testing.lifecycle.RotationCallback;
 import it.polimi.testing.lifecycle.StopCallback;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -130,7 +131,7 @@ public class MainActivityEspressoTest extends ActivityRuleLifecycleTest<MainActi
     }
 
     @Override
-    public RecreateCallback testRotation()
+    public RecreateCallback testRecreation()
     {
         return new RecreateCallback()
         {
@@ -167,8 +168,8 @@ public class MainActivityEspressoTest extends ActivityRuleLifecycleTest<MainActi
     }
 
     @Override
-    public RecreateCallback testRecreation()
+    public RotationCallback testRotation()
     {
-        return testRotation();
+        return null;
     }
 }

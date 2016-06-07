@@ -9,7 +9,10 @@ import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertNotSame;
 import static junit.framework.Assert.assertTrue;
 
-public class LifecycleTest_TestUtils
+/**
+ * Some utils to create the callbacks used during the tests
+ */
+class LifecycleTest_TestUtils
 {
     public static PauseCallback getTestPauseCallback(final ControlActivity activity)
     {
@@ -116,6 +119,22 @@ public class LifecycleTest_TestUtils
 
         oldActivity.assertSingleTraversed(
                 ControlActivity.ON_SAVE_INSTANCE_STATE,
+                ControlActivity.ON_PAUSE,
+                ControlActivity.ON_SAVE_INSTANCE_STATE,
+                ControlActivity.ON_STOP,
+                ControlActivity.ON_DESTROY
+        );
+
+        newActivity.assertSingleTraversed();
+    }
+
+    public static void rotationCallback_afterRotation(ControlActivity oldActivity, ControlActivity newActivity)
+    {
+        assertNotSame("Activity is not recreated", oldActivity, newActivity);
+
+        assertEquals("Restored bundle did not work", oldActivity.bundleValue, newActivity.bundleValue);
+
+        oldActivity.assertSingleTraversed(
                 ControlActivity.ON_PAUSE,
                 ControlActivity.ON_SAVE_INSTANCE_STATE,
                 ControlActivity.ON_STOP,

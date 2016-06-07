@@ -6,6 +6,10 @@ import org.junit.runner.RunWith;
 import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
+/**
+ * Test for the tests. Use the "lifecycletesting_tests" module to see if this implementation correctly calls
+ * all the lifecycle methods.
+ */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class RobolectricLifecycleTest_Test extends RobolectricLifecycleTest<ControlActivity>

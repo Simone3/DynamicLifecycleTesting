@@ -14,6 +14,7 @@ import it.polimi.testing.lifecycle.ActivityRuleLifecycleTest;
 import it.polimi.testing.lifecycle.DestroyCallback;
 import it.polimi.testing.lifecycle.PauseCallback;
 import it.polimi.testing.lifecycle.RecreateCallback;
+import it.polimi.testing.lifecycle.RotationCallback;
 import it.polimi.testing.lifecycle.StopCallback;
 
 import static junit.framework.Assert.assertEquals;
@@ -146,13 +147,13 @@ public class MainActivityUnitTest extends ActivityRuleLifecycleTest<MainActivity
             @Override
             public void afterDestroy()
             {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.DESTROYED, activityTestRule.getActivity().myLifecycleVariable);
+                assertTrue("Wrong myLifecycleVariable!", activityTestRule.getActivity().myLifecycleVariable==MainActivity.DESTROYED || activityTestRule.getActivity().myLifecycleVariable==MainActivity.STOPPED);
             }
         };
     }
 
     @Override
-    public RecreateCallback testRotation()
+    public RecreateCallback testRecreation()
     {
         return new RecreateCallback()
         {
@@ -208,8 +209,8 @@ public class MainActivityUnitTest extends ActivityRuleLifecycleTest<MainActivity
     }
 
     @Override
-    public RecreateCallback testRecreation()
+    public RotationCallback testRotation()
     {
-        return testRotation();
+        return null;
     }
 }

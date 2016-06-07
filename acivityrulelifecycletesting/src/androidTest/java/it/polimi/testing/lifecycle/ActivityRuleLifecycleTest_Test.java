@@ -3,6 +3,10 @@ package it.polimi.testing.lifecycle;
 import android.os.Bundle;
 import android.support.test.rule.ActivityTestRule;
 
+/**
+ * Test for the tests. Use the "lifecycletesting_tests" module to see if this implementation correctly calls
+ * all the lifecycle methods.
+ */
 public class ActivityRuleLifecycleTest_Test extends ActivityRuleLifecycleTest<ControlActivity>
 {
     @Override
@@ -30,29 +34,23 @@ public class ActivityRuleLifecycleTest_Test extends ActivityRuleLifecycleTest<Co
     }
 
     @Override
-    public RecreateCallback testRotation()
+    public RotationCallback testRotation()
     {
-        return new RecreateCallback()
+        return new RotationCallback()
         {
             private ControlActivity oldActivity;
 
             @Override
-            public void beforeRecreation()
+            public void beforeRotation()
             {
                 oldActivity = activityTestRule.getActivity();
                 LifecycleTest_TestUtils.recreateCallback_beforeRecreation(activityTestRule.getActivity());
             }
 
             @Override
-            public void checkSavedInstance(Bundle savedInstanceState)
+            public void afterRotation()
             {
-                LifecycleTest_TestUtils.recreateCallback_checkSavedInstance(activityTestRule.getActivity(), savedInstanceState);
-            }
-
-            @Override
-            public void afterRecreation()
-            {
-                LifecycleTest_TestUtils.recreateCallback_afterRecreation(oldActivity, activityTestRule.getActivity());
+                LifecycleTest_TestUtils.rotationCallback_afterRotation(oldActivity, activityTestRule.getActivity());
             }
         };
     }

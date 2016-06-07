@@ -10,6 +10,10 @@ import java.util.Random;
 
 import static junit.framework.Assert.assertEquals;
 
+/**
+ * Test activity used to see if the lifecycle tests work. It simply adds a callback value in the
+ * "traversedCallbacks" list and offers some utility methods to assert on it.
+ */
 public class ControlActivity extends Activity
 {
     public final static String ON_CREATE = "ON_CREATE";
@@ -91,17 +95,31 @@ public class ControlActivity extends Activity
         traversedCallbacks.add(ON_SAVE_INSTANCE_STATE);
     }
 
+
+    /**
+     * Checks if the current callbacks are equal to the given ones
+     * @param addCommonCallbacks if true the current list is common (create, start, resume) + expectedCallbacks, if false only expectedCallbacks
+     * @param expectedCallbacks the expected callbacks
+     */
     public void assertSingleTraversed(boolean addCommonCallbacks, String... expectedCallbacks)
     {
         List<String> allCallbacks = addCommonCallbacks ? addCommonCallbacks(Arrays.asList(expectedCallbacks)) : Arrays.asList(expectedCallbacks);
         assertEquals("Wrong traversed callbacks!", allCallbacks, traversedCallbacks);
     }
 
+    /**
+     * Checks if the current callbacks are equal to the given ones. It adds create-start-resume before the given callbacks.
+     * @param expectedCallbacks the expected callbacks
+     */
     public void assertSingleTraversed(String... expectedCallbacks)
     {
         assertSingleTraversed(true, expectedCallbacks);
     }
 
+    /**
+     * Checks if the current callbacks are one of the provided lists
+     * @param possibleListsOfExpectedCallbacks possible lists of callbacks
+     */
     @SafeVarargs
     public final void assertMultipleTraversed(List<String>... possibleListsOfExpectedCallbacks)
     {
@@ -130,6 +148,11 @@ public class ControlActivity extends Activity
         }
     }
 
+    /**
+     * Add common callbacks to the list
+     * @param specificCallbacks the callbacks
+     * @return common callbacks + specificCallbacks
+     */
     private List<String> addCommonCallbacks(List<String> specificCallbacks)
     {
         List<String> allCallbacks = new ArrayList<>();

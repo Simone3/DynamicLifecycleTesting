@@ -16,30 +16,52 @@ import java.util.Collection;
 
 import static android.support.test.InstrumentationRegistry.getInstrumentation;
 
+/**
+ * Implementation of {@link LifecycleTest} for the "Activity Test Rule" framework, used for unit
+ * testing or Espresso
+ * @param <T> the activity under test
+ */
 public abstract class ActivityRuleLifecycleTest<T extends Activity> extends LifecycleTest
 {
     @Rule
-    public ActivityTestRule<T> activityTestRule;
+    public final ActivityTestRule<T> activityTestRule;
 
+    /**
+     * Constructor
+     */
     protected ActivityRuleLifecycleTest()
     {
         this.activityTestRule = getActivityTestRule();
     }
 
+    /**
+     * Use this method to initialize the ActivityTestRule, i.e. do NOT define the @Rule
+     * variable yourself
+     * @return the test rule of the test suite
+     */
     protected abstract ActivityTestRule<T> getActivityTestRule();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void beforeLifecycleTest()
     {
         // Do nothing here
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void afterLifecycleTest()
     {
         // Do nothing here
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void callOnCreate(final Bundle savedInstanceState)
     {
@@ -53,6 +75,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     boolean callOnRestart()
     {
@@ -67,6 +92,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void callOnStart()
     {
@@ -80,6 +108,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void callOnResume()
     {
@@ -93,6 +124,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void callOnPause()
     {
@@ -106,6 +140,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void callOnStop()
     {
@@ -119,6 +156,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         });
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void callFinish()
     {
@@ -144,6 +184,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void rotateDevice()
     {
@@ -153,6 +196,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         updateActivityReferenceAfterRecreation();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     void recreateActivity()
     {
@@ -167,37 +213,9 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         updateActivityReferenceAfterRecreation();
     }
 
-    private void updateActivityReferenceAfterRecreation()
-    {
-        // The activity changed, retrieve it using the ActivityLifecycleMonitorRegistry
-        getInstrumentation().waitForIdleSync();
-        class Wrapper {Activity activity;}
-        final Wrapper wrapper = new Wrapper();
-        runInUIThreadSync(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
-                wrapper.activity = activities.iterator().next();
-            }
-        });
-        Activity activity = wrapper.activity;
-
-        // The activity changed, but there is no setter in ActivityTestRule: need to use reflection to set the private field
-        // This of course is not so great, relying on refection (bad) and on current implementation of ActivityTestRule (bad)
-        try
-        {
-            Field f = activityTestRule.getClass().getDeclaredField("mActivity");
-            f.setAccessible(true);
-            f.set(activityTestRule, activity);
-        }
-        catch(IllegalAccessException | NoSuchFieldException e)
-        {
-            throw new IllegalStateException("The implementation of ActivityTestRule has changed, check the ActivityRuleLifecycleTest#updateActivityReferenceAfterRecreation() method.");
-        }
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     Bundle getSavedInstanceState()
     {
@@ -213,17 +231,59 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         return savedInstanceState;
     }
 
-
-
+    /**
+     * Helper to run some code on the UI Thread in a synchronous way (i.e. this method returns only after the
+     * runnable has completed)
+     * @param runnable the code to run
+     */
     private void runInUIThreadSync(Runnable runnable)
     {
+        // If we are already in the main thread, just run it
         if(Looper.myLooper() == Looper.getMainLooper())
         {
             runnable.run();
         }
+
+        // Otherwise call the instrumentation method
         else
         {
             getInstrumentation().runOnMainSync(runnable);
+        }
+    }
+
+    /**
+     * During a recreation the activity object is destroyed and a new instance is created, i.e. the pointer
+     * activityTestRule.getActivity() contains the old destroyed activity. This helper retrieves the new instance
+     * of the activity and sets it in the activityTestRule.
+     */
+    private void updateActivityReferenceAfterRecreation()
+    {
+        // Retrieve the new instance using the ActivityLifecycleMonitorRegistry
+        getInstrumentation().waitForIdleSync();
+        class Wrapper {Activity activity;}
+        final Wrapper wrapper = new Wrapper();
+        runInUIThreadSync(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                Collection<Activity> activities = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED);
+                wrapper.activity = activities.iterator().next();
+            }
+        });
+        Activity activity = wrapper.activity;
+
+        // There is no setter in ActivityTestRule: need to use reflection to set the private field
+        // This of course is not so great, relying on refection (bad) and on current implementation of ActivityTestRule (bad)
+        try
+        {
+            Field f = activityTestRule.getClass().getDeclaredField("mActivity");
+            f.setAccessible(true);
+            f.set(activityTestRule, activity);
+        }
+        catch(IllegalAccessException | NoSuchFieldException e)
+        {
+            throw new IllegalStateException("The implementation of ActivityTestRule has changed, check the ActivityRuleLifecycleTest#updateActivityReferenceAfterRecreation() method.");
         }
     }
 }
