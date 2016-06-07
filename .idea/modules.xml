@@ -3,7 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/DynamicLifecycleTesting.iml" filepath="$PROJECT_DIR$/DynamicLifecycleTesting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/acivityrulelifecycletesting/acivityrulelifecycletesting.iml" filepath="$PROJECT_DIR$/acivityrulelifecycletesting/acivityrulelifecycletesting.iml" />
       <module fileurl="file://$PROJECT_DIR$/lifecycletesting/lifecycletesting.iml" filepath="$PROJECT_DIR$/lifecycletesting/lifecycletesting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lifecycletesting_tests/lifecycletesting_tests.iml" filepath="$PROJECT_DIR$/lifecycletesting_tests/lifecycletesting_tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/robolectriclifecycletesting/robolectriclifecycletesting.iml" filepath="$PROJECT_DIR$/robolectriclifecycletesting/robolectriclifecycletesting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sample_app/sample_app.iml" filepath="$PROJECT_DIR$/sample_app/sample_app.iml" />
     </modules>
   </component>
 </project>

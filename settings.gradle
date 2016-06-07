@@ -1,1 +1,1 @@
-include ':lifecycletesting'
+include ':lifecycletesting', ':sample_app', ':robolectriclifecycletesting', ':acivityrulelifecycletesting', ':lifecycletesting_tests'

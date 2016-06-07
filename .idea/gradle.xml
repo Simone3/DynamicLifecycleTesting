@@ -8,13 +8,21 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/acivityrulelifecycletesting" />
             <option value="$PROJECT_DIR$/lifecycletesting" />
+            <option value="$PROJECT_DIR$/lifecycletesting_tests" />
+            <option value="$PROJECT_DIR$/robolectriclifecycletesting" />
+            <option value="$PROJECT_DIR$/sample_app" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/acivityrulelifecycletesting" />
             <option value="$PROJECT_DIR$/lifecycletesting" />
+            <option value="$PROJECT_DIR$/lifecycletesting_tests" />
+            <option value="$PROJECT_DIR$/robolectriclifecycletesting" />
+            <option value="$PROJECT_DIR$/sample_app" />
           </set>
         </option>
       </GradleProjectSettings>

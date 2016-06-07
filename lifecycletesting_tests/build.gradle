@@ -16,7 +16,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
@@ -25,4 +24,7 @@ dependencies {
 
     // Include JUnit as PRODUCTION CODE
     compile 'junit:junit:4.12'
+
+    // Include module for common lifecycle tests
+    compile project(path: ':lifecycletesting')
 }
