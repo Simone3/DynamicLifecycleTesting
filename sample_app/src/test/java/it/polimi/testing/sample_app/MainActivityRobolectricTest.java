@@ -1,5 +1,7 @@
 package it.polimi.testing.sample_app;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import org.junit.runner.RunWith;
@@ -13,9 +15,13 @@ import it.polimi.testing.lifecycle.RobolectricLifecycleTest;
 import it.polimi.testing.lifecycle.StopCallback;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 
+/**
+ * Example of lifecycle tests for the Robolectric framework
+ */
 @RunWith(RobolectricGradleTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class MainActivityRobolectricTest extends RobolectricLifecycleTest<MainActivity>
@@ -27,69 +33,39 @@ public class MainActivityRobolectricTest extends RobolectricLifecycleTest<MainAc
     }
 
     @Override
-    public PauseCallback testPause()
-    {
-        return new PauseCallback()
-        {
-            private String textViewText;
-
-            @Override
-            public void beforePause()
-            {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.RESUMED, getActivity().myLifecycleVariable);
-
-                getActivity().myButton.performClick();
-
-                textViewText = getActivity().myTextView.getText().toString();
-            }
-
-            @Override
-            public void whilePaused()
-            {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.PAUSED, getActivity().myLifecycleVariable);
-            }
-
-            @Override
-            public void afterResume()
-            {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.RESUMED, getActivity().myLifecycleVariable);
-
-                assertEquals("Wrong myTextView text!", textViewText, getActivity().myTextView.getText().toString());
-            }
-        };
-    }
-
-    @Override
     public StopCallback testStop()
     {
+        // Return null if you are not interested in this lifecycle test
         return new StopCallback()
         {
-            private String textViewText;
-
             @Override
             public void beforeStop()
             {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.RESUMED, getActivity().myLifecycleVariable);
-
-                getActivity().myButton.performClick();
-
-                textViewText = getActivity().myTextView.getText().toString();
+                // BroadcastReceiver is enabled
+                assertTrue("BroadcastReceiver not active", getActivity().broadcastReceiverRegistered);
             }
 
             @Override
             public void whileStopped()
             {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.STOPPED, getActivity().myLifecycleVariable);
+                // BroadcastReceiver is disabled
+                assertFalse("BroadcastReceiver active while stopped", getActivity().broadcastReceiverRegistered);
             }
 
             @Override
             public void afterRestart()
             {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.RESUMED, getActivity().myLifecycleVariable);
-
-                assertEquals("Wrong myTextView text!", textViewText, getActivity().myTextView.getText().toString());
+                // BroadcastReceiver is enabled
+                assertTrue("BroadcastReceiver not active", getActivity().broadcastReceiverRegistered);
             }
         };
+    }
+
+    @Override
+    public PauseCallback testPause()
+    {
+        // Return null if you are not interested in this lifecycle test
+        return null;
     }
 
     @Override
@@ -100,13 +76,18 @@ public class MainActivityRobolectricTest extends RobolectricLifecycleTest<MainAc
             @Override
             public void beforeDestroy()
             {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.RESUMED, getActivity().myLifecycleVariable);
+                // Perform some actions
+                getActivity().name.setText("MyName");
+                for(int i=0; i<4; i++) getActivity().button.performClick();
             }
 
             @Override
             public void afterDestroy()
             {
-                assertTrue("Wrong myLifecycleVariable!", getActivity().myLifecycleVariable==MainActivity.DESTROYED || getActivity().myLifecycleVariable==MainActivity.STOPPED);
+                // Check that when the app is killed the shared preferences are always updated
+                SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+                int savedMaxClicks = sharedPref.getInt(MainActivity.MAX_CLICKS_FOR+"MyName", 0);
+                assertTrue("Max clicks not saved", savedMaxClicks>=4);
             }
         };
     }
@@ -116,35 +97,46 @@ public class MainActivityRobolectricTest extends RobolectricLifecycleTest<MainAc
     {
         return new RecreateCallback()
         {
-            private String textViewText;
-            private int bundleVar;
-
             @Override
             public void beforeRecreation()
             {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.RESUMED, getActivity().myLifecycleVariable);
+                // Perform some actions
+                getActivity().name.setText("MyName");
+                for(int i=0; i<2; i++) getActivity().button.performClick();
 
-                getActivity().myButton.performClick();
-
-                textViewText = getActivity().myTextView.getText().toString();
-
-                bundleVar = getActivity().myBundleVariable;
+                // Check counter before the recreation
+                assertEquals("Counter not working",
+                        2,
+                        getActivity().clicks);
+                assertEquals("Counter text not working",
+                        getActivity().getString(R.string.counter, 2),
+                        getActivity().counter.getText().toString());
             }
 
             @Override
             public void checkSavedInstance(Bundle savedInstanceState)
             {
+                // Check that the bundle contains the right number of clicks
                 assertNotNull("Bundle null", savedInstanceState);
-                assertTrue("Bundle does not save variable", savedInstanceState.containsKey(MainActivity.BUNDLE_VAR));
-                assertEquals("Wrong bundle value", bundleVar, savedInstanceState.getInt(MainActivity.BUNDLE_VAR));
+                assertTrue("Bundle does not save variable", savedInstanceState.containsKey(MainActivity.CLICKS));
+                assertEquals("Wrong number of clicks", 2, savedInstanceState.getInt(MainActivity.CLICKS));
             }
 
             @Override
             public void afterRecreation()
             {
-                assertEquals("Wrong myLifecycleVariable!", MainActivity.RESUMED, getActivity().myLifecycleVariable);
+                // Check name input is still there
+                assertEquals("Name lost with recreation",
+                        "MyName",
+                        getActivity().name.getText().toString());
 
-                assertEquals("Wrong myTextView text!", textViewText, getActivity().myTextView.getText().toString());
+                // Check that the counter is correctly restored
+                assertEquals("Counter not restored",
+                        2,
+                        getActivity().clicks);
+                assertEquals("Counter text not restored",
+                        getActivity().getString(R.string.counter, 2),
+                        getActivity().counter.getText().toString());
             }
         };
     }

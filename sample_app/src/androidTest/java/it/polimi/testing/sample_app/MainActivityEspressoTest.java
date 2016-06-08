@@ -16,15 +16,17 @@ import it.polimi.testing.lifecycle.StopCallback;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.hamcrest.core.StringStartsWith.startsWith;
+import static org.hamcrest.core.IsEqual.equalTo;
 
+/**
+ * Example of lifecycle tests for the Espresso framework
+ */
 @RunWith(AndroidJUnit4.class)
 @MediumTest
 public class MainActivityEspressoTest extends ActivityRuleLifecycleTest<MainActivity>
@@ -38,96 +40,22 @@ public class MainActivityEspressoTest extends ActivityRuleLifecycleTest<MainActi
     @Override
     public PauseCallback testPause()
     {
-        return new PauseCallback()
-        {
-            @Override
-            public void beforePause()
-            {
-                onView(withId(R.id.myButton))
-                        .perform(click());
-
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
-            }
-
-            @Override
-            public void whilePaused()
-            {
-                // ...
-            }
-
-            @Override
-            public void afterResume()
-            {
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
-
-                onView(withId(R.id.myButton))
-                        .perform(click());
-
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
-            }
-        };
+        // Return null if you are not interested in this lifecycle test
+        return null;
     }
 
     @Override
     public StopCallback testStop()
     {
-        return new StopCallback()
-        {
-            @Override
-            public void beforeStop()
-            {
-                onView(withId(R.id.myButton))
-                        .perform(click());
-
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
-            }
-
-            @Override
-            public void whileStopped()
-            {
-                // ...
-            }
-
-            @Override
-            public void afterRestart()
-            {
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
-
-                onView(withId(R.id.myButton))
-                        .perform(click());
-
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
-            }
-        };
+        // Return null if you are not interested in this lifecycle test
+        return null;
     }
 
     @Override
     public DestroyCallback testDestroy()
     {
-        return new DestroyCallback()
-        {
-            @Override
-            public void beforeDestroy()
-            {
-                onView(withId(R.id.myButton))
-                        .perform(click());
-
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
-            }
-
-            @Override
-            public void afterDestroy()
-            {
-                // ?
-            }
-        };
+        // Return null if you are not interested in this lifecycle test
+        return null;
     }
 
     @Override
@@ -138,31 +66,36 @@ public class MainActivityEspressoTest extends ActivityRuleLifecycleTest<MainActi
             @Override
             public void beforeRecreation()
             {
-                onView(withId(R.id.myButton))
-                        .perform(click());
+                // Perform some actions
+                onView(withId(R.id.name))
+                        .perform(typeText("MyName"));
+                for(int i=0; i<3; i++)
+                {
+                    onView(withId(R.id.button))
+                            .perform(click());
+                }
 
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
+                // Check counter
+                onView(withId(R.id.counter))
+                        .check(matches(allOf(isDisplayed(), withText(equalTo("3 clicks")))));
             }
 
             @Override
             public void checkSavedInstance(Bundle savedInstanceState)
             {
-                assertNotNull("Bundle null", savedInstanceState);
-                assertTrue("Bundle does not save variable", savedInstanceState.containsKey(MainActivity.BUNDLE_VAR));
+                // Do nothing here
             }
 
             @Override
             public void afterRecreation()
             {
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
+                // Check name input is still there
+                onView(withId(R.id.name))
+                        .check(matches(allOf(isDisplayed(), withText(equalTo("MyName")))));
 
-                onView(withId(R.id.myButton))
-                        .perform(click());
-
-                onView(withId(R.id.myTextView))
-                        .check(matches(allOf(isDisplayed(), withText(startsWith("My value")))));
+                // Check that the counter is correctly restored
+                onView(withId(R.id.counter))
+                        .check(matches(allOf(isDisplayed(), withText(equalTo("3 clicks")))));
             }
         };
     }
@@ -170,6 +103,31 @@ public class MainActivityEspressoTest extends ActivityRuleLifecycleTest<MainActi
     @Override
     public RotationCallback testRotation()
     {
-        return null;
+        return new RotationCallback()
+        {
+            @Override
+            public void beforeRotation()
+            {
+                // Check that all UI elements are visible in the vertical layout
+                onView(withId(R.id.button))
+                    .check(matches(isDisplayed()));
+                onView(withId(R.id.counter))
+                        .check(matches(isDisplayed()));
+                onView(withId(R.id.name))
+                        .check(matches(isDisplayed()));
+            }
+
+            @Override
+            public void afterRotation()
+            {
+                // Check that all UI elements are visible in the horizontal layout
+                onView(withId(R.id.button))
+                        .check(matches(isDisplayed()));
+                onView(withId(R.id.counter))
+                        .check(matches(isDisplayed()));
+                onView(withId(R.id.name))
+                        .check(matches(isDisplayed()));
+            }
+        };
     }
 }

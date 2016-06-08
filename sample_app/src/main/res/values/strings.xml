@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Sample App</string>
-    <string name="initial">Initial</string>
+    <string name="initial">Counter</string>
     <string name="click">Click</string>
-    <string name="my_value">My value is %1$d</string>
+    <string name="counter">%1$d clicks</string>
+    <string name="name">You name is…</string>
 </resources>

@@ -1,6 +1,7 @@
 package it.polimi.testing.lifecycle;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 
 import org.junit.Test;
 
@@ -111,9 +112,9 @@ public abstract class LifecycleTest
      * - onResume()
      * - <b>{@link PauseCallback#afterResume()}</b>
      *
-     * @return the callback
+     * @return the callback (null if not interested in this test)
      */
-    protected abstract PauseCallback testPause();
+    protected abstract @Nullable PauseCallback testPause();
 
     /**
      * Allows to define the test:
@@ -129,9 +130,9 @@ public abstract class LifecycleTest
      * - onResume()
      * - <b>{@link StopCallback#afterRestart()}</b>
      *
-     * @return the callback
+     * @return the callback (null if not interested in this test)
      */
-    protected abstract StopCallback testStop();
+    protected abstract @Nullable StopCallback testStop();
 
     /**
      * Allows to define the test:
@@ -147,18 +148,18 @@ public abstract class LifecycleTest
      * Note that onDestroy() gets called in one test while not in another one: see <a href="https://developer.android.com/reference/android/app/Activity.html#onDestroy%28%29">here</a>,
      * onDestroy() is not always called
      *
-     * @return the callback
+     * @return the callback (null if not interested in this test)
      */
-    protected abstract DestroyCallback testDestroy();
+    protected abstract @Nullable DestroyCallback testDestroy();
 
 
     /**
      * Allows to define a test where the device is rotated (landscape->portrait or vice-versa). In the default implementation
      * this also means that the component is recreated (and so this test is a special case of {@link LifecycleTest#testRecreation()}),
      * but it might not be the case (e.g. parameters set in app manifest)
-     * @return the callback
+     * @return the callback (null if not interested in this test)
      */
-    protected abstract RotationCallback testRotation();
+    protected abstract @Nullable RotationCallback testRotation();
 
     /**
      * Allows to define the test:
@@ -166,7 +167,6 @@ public abstract class LifecycleTest
      * - onStart()
      * - onResume()
      * - <b>{@link RecreateCallback#beforeRecreation()}</b>
-     * - <b>{@link RecreateCallback#checkSavedInstance(Bundle)}</b>
      * - onPause()
      * - onStop()
      * - onDestroy()
@@ -175,9 +175,12 @@ public abstract class LifecycleTest
      * - onResume()
      * - <b>{@link RecreateCallback#afterRecreation()}</b>
      *
-     * @return the callback
+     * During the test, <b>{@link RecreateCallback#checkSavedInstance(Bundle)}</b> will be called to allow
+     * checking the actual contents of the bundle used to pass the instance of the component.
+     *
+     * @return the callback (null if not interested in this test)
      */
-    protected abstract RecreateCallback testRecreation();
+    protected abstract @Nullable RecreateCallback testRecreation();
 
 
 

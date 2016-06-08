@@ -63,7 +63,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    void callOnCreate(final Bundle savedInstanceState)
+    protected void callOnCreate(final Bundle savedInstanceState)
     {
         runInUIThreadSync(new Runnable()
         {
@@ -79,7 +79,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    boolean callOnRestart()
+    protected boolean callOnRestart()
     {
         runInUIThreadSync(new Runnable()
         {
@@ -96,7 +96,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    void callOnStart()
+    protected void callOnStart()
     {
         runInUIThreadSync(new Runnable()
         {
@@ -112,7 +112,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    void callOnResume()
+    protected void callOnResume()
     {
         runInUIThreadSync(new Runnable()
         {
@@ -128,7 +128,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    void callOnPause()
+    protected void callOnPause()
     {
         runInUIThreadSync(new Runnable()
         {
@@ -144,7 +144,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    void callOnStop()
+    protected void callOnStop()
     {
         runInUIThreadSync(new Runnable()
         {
@@ -160,7 +160,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    void callFinish()
+    protected void callFinish()
     {
         runInUIThreadSync(new Runnable()
         {
@@ -188,7 +188,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    void rotateDevice()
+    protected void rotateDevice()
     {
         int currentOrientation = activityTestRule.getActivity().getResources().getConfiguration().orientation;
         int newOrientation = currentOrientation==Configuration.ORIENTATION_LANDSCAPE ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
@@ -200,7 +200,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    void recreateActivity()
+    protected void recreateActivity()
     {
         runInUIThreadSync(new Runnable()
         {
@@ -217,7 +217,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    Bundle getSavedInstanceState()
+    protected Bundle getSavedInstanceState()
     {
         final Bundle savedInstanceState = new Bundle();
         runInUIThreadSync(new Runnable()
