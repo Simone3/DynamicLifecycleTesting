@@ -33,3 +33,5 @@ dependencies {
     // Include the module to test the tests
     testCompile project(path: ':lifecycletesting_tests')
 }
+
+apply from: rootProject.file('release.gradle')
