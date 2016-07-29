@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 11
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -26,3 +26,5 @@ dependencies {
     // Include JUnit as PRODUCTION CODE
     compile 'junit:junit:4.12'
 }
+
+apply from: rootProject.file('release.gradle')

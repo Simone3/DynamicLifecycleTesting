@@ -281,7 +281,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
             f.setAccessible(true);
             f.set(activityTestRule, activity);
         }
-        catch(IllegalAccessException | NoSuchFieldException e)
+        catch(Exception e)
         {
             throw new IllegalStateException("The implementation of ActivityTestRule has changed, check the ActivityRuleLifecycleTest#updateActivityReferenceAfterRecreation() method.");
         }
