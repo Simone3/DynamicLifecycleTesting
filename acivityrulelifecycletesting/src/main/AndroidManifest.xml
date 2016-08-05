@@ -1,9 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.polimi.testing.lifecycle_acivityrule">
+    package="it.polimi.testing.lifecycle_acivityrule"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application android:allowBackup="true"
         android:label="@string/app_name"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        tools:replace="android:label">
 
         <activity android:name="it.polimi.testing.lifecycle.ControlActivity"/>
 

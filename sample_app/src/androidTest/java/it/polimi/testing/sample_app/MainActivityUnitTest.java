@@ -36,7 +36,7 @@ import static junit.framework.Assert.assertTrue;
 public class MainActivityUnitTest extends ActivityRuleLifecycleTest<MainActivity>
 {
     @Override
-    protected ActivityTestRule<MainActivity> getActivityTestRule()
+    protected ActivityTestRule<MainActivity> initializeActivityTestRule()
     {
         return new ActivityTestRule<>(MainActivity.class);
     }

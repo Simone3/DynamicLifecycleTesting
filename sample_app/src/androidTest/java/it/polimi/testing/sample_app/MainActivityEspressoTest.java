@@ -32,7 +32,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class MainActivityEspressoTest extends ActivityRuleLifecycleTest<MainActivity>
 {
     @Override
-    protected ActivityTestRule<MainActivity> getActivityTestRule()
+    protected ActivityTestRule<MainActivity> initializeActivityTestRule()
     {
         return new ActivityTestRule<>(MainActivity.class);
     }

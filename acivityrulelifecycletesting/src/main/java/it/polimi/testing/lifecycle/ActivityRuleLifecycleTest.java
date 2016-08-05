@@ -31,7 +31,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      */
     protected ActivityRuleLifecycleTest()
     {
-        this.activityTestRule = getActivityTestRule();
+        this.activityTestRule = initializeActivityTestRule();
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * variable yourself
      * @return the test rule of the test suite
      */
-    protected abstract ActivityTestRule<T> getActivityTestRule();
+    protected abstract ActivityTestRule<T> initializeActivityTestRule();
 
     /**
      * {@inheritDoc}

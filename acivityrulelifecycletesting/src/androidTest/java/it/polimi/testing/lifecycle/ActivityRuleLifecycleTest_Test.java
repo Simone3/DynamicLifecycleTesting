@@ -10,7 +10,7 @@ import android.support.test.rule.ActivityTestRule;
 public class ActivityRuleLifecycleTest_Test extends ActivityRuleLifecycleTest<ControlActivity>
 {
     @Override
-    protected ActivityTestRule<ControlActivity> getActivityTestRule()
+    protected ActivityTestRule<ControlActivity> initializeActivityTestRule()
     {
         return new ActivityTestRule<>(ControlActivity.class);
     }
