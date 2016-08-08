@@ -175,11 +175,58 @@ public class MainActivityUnitTest extends ActivityRuleLifecycleTest<MainActivity
         };
     }
 
+
+
     /**
-     * Can also define custom lifecycle tests
+     * Can also chain several lifecycle tests (with callbacks)
      */
     @Test
-    public void myCustomLifecycleTest()
+    public void myCustomLifecycleTest_Chaining()
+    {
+        // First pause/resume
+        pauseAndResumeComponent(new PauseCallback()
+        {
+            @Override
+            public void beforePause()
+            {
+                // ...
+            }
+
+            @Override
+            public void whilePaused()
+            {
+                // ...
+            }
+
+            @Override
+            public void afterResume()
+            {
+                // ...
+            }
+        });
+
+        // Then destroy activity
+        destroyComponent(true, new DestroyCallback()
+        {
+            @Override
+            public void beforeDestroy()
+            {
+                // ...
+            }
+
+            @Override
+            public void afterDestroy()
+            {
+                // ...
+            }
+        });
+    }
+
+    /**
+     * Can also define custom lifecycle tests (with low-level calls)
+     */
+    @Test
+    public void myCustomLifecycleTest_LowLevel()
     {
         // Actions and checks
         write(activityTestRule.getActivity().name, "MyName");

@@ -136,7 +136,7 @@ public abstract class RobolectricLifecycleTest<T extends Activity> extends Lifec
      * NOT SUPPORTED BY ROBOLECTRIC
      */
     @Override
-    void rotateDevice()
+    void callRotation()
     {
         /**
          * activity.setRequestedOrientation() does not work (activity is just a "shadow")
@@ -150,7 +150,7 @@ public abstract class RobolectricLifecycleTest<T extends Activity> extends Lifec
      * {@inheritDoc}
      */
     @Override
-    void recreateActivity()
+    void callRecreation()
     {
         Bundle savedInstanceState = new Bundle();
 

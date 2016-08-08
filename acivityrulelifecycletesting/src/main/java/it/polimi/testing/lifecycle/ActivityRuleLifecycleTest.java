@@ -188,7 +188,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    protected void rotateDevice()
+    protected void callRotation()
     {
         int currentOrientation = activityTestRule.getActivity().getResources().getConfiguration().orientation;
         int newOrientation = currentOrientation==Configuration.ORIENTATION_LANDSCAPE ? ActivityInfo.SCREEN_ORIENTATION_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
@@ -200,7 +200,7 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
      * {@inheritDoc}
      */
     @Override
-    protected void recreateActivity()
+    protected void callRecreation()
     {
         runInUIThreadSync(new Runnable()
         {
