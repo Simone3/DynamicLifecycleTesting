@@ -277,7 +277,16 @@ public abstract class ActivityRuleLifecycleTest<T extends Activity> extends Life
         // This of course is not so great, relying on refection (bad) and on current implementation of ActivityTestRule (bad)
         try
         {
-            Field f = activityTestRule.getClass().getDeclaredField("mActivity");
+            // Get the ActivityTestRule (if the current object is a subclass, e.g. IntentsTestRule, need to go up to ActivityTestRule)
+            Class c = activityTestRule.getClass();
+            while(c!=ActivityTestRule.class)
+            {
+                c = c.getSuperclass();
+                if(c==null) throw new Exception();
+            }
+
+            // Set the field
+            Field f = c.getDeclaredField("mActivity");
             f.setAccessible(true);
             f.set(activityTestRule, activity);
         }

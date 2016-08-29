@@ -5,9 +5,9 @@ Lifecycle tests for Android (Espresso, Activity Test Rule and Robolectric), for 
 Include:
 
 ```groovy
-androidTestCompile 'it.polimi.testing:activity-rule-lifecycle-testing:1.0'
+androidTestCompile 'it.polimi.testing:activity-rule-lifecycle-testing:1.1'
 ```
 
 ```groovy
-testCompile 'it.polimi.testing:robolectric-lifecycle-testing:1.0'
+testCompile 'it.polimi.testing:robolectric-lifecycle-testing:1.1'
 ```
